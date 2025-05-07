@@ -1,0 +1,30 @@
+---
+- name: Configure firewalld to allow HTTP and HTTPS
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Enable firewalld
+      ansible.builtin.systemd:
+        name: firewalld
+        state: started
+        enabled: yes
+
+    - name: Allow HTTP service
+      ansible.builtin.firewalld:
+        service: http
+        permanent: yes
+        state: enabled
+        immediate: yes
+
+    - name: Allow HTTPS service
+      ansible.builtin.firewalld:
+        service: https
+        permanent: yes
+        state: enabled
+        immediate: yes
+
+    - name: Reload firewalld to apply changes
+      ansible.builtin.command:
+        cmd: firewall-cmd --reload
+
